@@ -4,6 +4,7 @@ import io.gatling.javaapi.core.ChainBuilder;
 import io.gatling.javaapi.core.FeederBuilder;
 
 import static acetoys.session.UserSession.increaseItemsInBasketForSession;
+import static acetoys.session.UserSession.increaseSessionBasketTotal;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
@@ -26,5 +27,5 @@ public class Product {
                             http("Add to cart: #{name}")
                                 .get("/cart/add/#{id}")
                                 .check(substring("You have <span>#{itemsInBasket}</span> products in your Basket."))
-            );
+            ).exec(increaseSessionBasketTotal);
 }
