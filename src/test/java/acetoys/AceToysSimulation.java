@@ -43,20 +43,11 @@ public class AceToysSimulation extends Simulation {
     .pause(2)
     .exec(Cart.viewCart)
     .pause(2)
-//          .exec(
-//            session -> {
-//              System.out.println(session);
-//              System.out.println("csrfTokenLogout is: " + session.getString("csrfTokenLogout"));
-//              return session;
-//            }
-//          )
     .repeat(2)
         .on(Cart.increaseProductQuantity
         .pause(2))
     .exec(Cart.decreaseProductQuantity )
     .pause(2)
-          .exec(Cart.viewCart)
-          .pause(2)
     .exec(Cart.checkout)
     .pause(2)
     .exec(Customer.logout);
