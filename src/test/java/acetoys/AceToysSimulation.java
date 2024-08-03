@@ -1,8 +1,6 @@
 package acetoys;
 
-import acetoys.pageobjects.*;
-
-import acetoys.session.UserSession;
+import acetoys.simulation.TestPopulation;
 import io.gatling.javaapi.core.*;
 import io.gatling.javaapi.http.*;
 
@@ -10,6 +8,8 @@ import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
 public class AceToysSimulation extends Simulation {
+
+  private static final String TEST_TYPE = System.getProperty("TEST_TYPE", "INSTANT_USERS");
 
   private static final String DOMAIN = "acetoys.uk";
 
@@ -19,45 +19,18 @@ public class AceToysSimulation extends Simulation {
     .acceptEncodingHeader("gzip, deflate")
     .acceptLanguageHeader("be-BY,be;q=0.9,en-US;q=0.8,en;q=0.7,ru;q=0.6");
 
-  private ScenarioBuilder scn = scenario("AceToysSimulation")
-          .exec(UserSession.initSession)
-    .exec(StaticPages.homePage)
-    .pause(2)
-    .exec(StaticPages.ourStoryPage)
-    .pause(2)
-    .exec(StaticPages.getInTouchPage)
-    .pause(2)
-    .exec(Category.getCategory)
-    .pause(2)
-    .exec(Category.cyclePagesOfProducts)
-    .pause(2)
-    .exec(Product.getPDP)
-    .pause(2)
-    .exec(Product.addToCart)
-    .pause(2)
-    .exec(Category.getCategory)
-    .pause(2)
-    .exec(Product.addToCart)
-    .pause(2)
-    .exec(Product.addToCart)
-    .pause(2)
-    .exec(Cart.viewCart)
-    .pause(2)
-    .repeat(2)
-        .on(Cart.increaseProductQuantity
-        .pause(2))
-    .exec(Cart.decreaseProductQuantity )
-    .pause(2)
-    .exec(Cart.checkout)
-    .pause(2)
-    .exec(Customer.logout);
-
   // Set-up load parameters of test
   {
-	  setUp(
-         scn.injectOpen(
-            atOnceUsers(1)
-         )
-      ).protocols(httpProtocol);
+    switch (TEST_TYPE) {
+//      case ("INSTANT_USERS"): setUp(TestPopulation.instantUsers).protocols(httpProtocol);
+//        break;
+      case ("RAMP_USERS"): setUp(TestPopulation.rampUsers).protocols(httpProtocol);
+        break;
+      case ("COMPLEX_INJECTION"): setUp(TestPopulation.complexInjection).protocols(httpProtocol);
+        break;
+      case ("CLOSED_MODEL"): setUp(TestPopulation.closedModel).protocols(httpProtocol);
+        break;
+      default: setUp(TestPopulation.instantUsers).protocols(httpProtocol);
+    }
   }
 }
