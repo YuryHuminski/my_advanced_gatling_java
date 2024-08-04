@@ -24,13 +24,33 @@ public class AceToysSimulation extends Simulation {
     switch (TEST_TYPE) {
 //      case ("INSTANT_USERS"): setUp(TestPopulation.instantUsers).protocols(httpProtocol);
 //        break;
-      case ("RAMP_USERS"): setUp(TestPopulation.rampUsers).protocols(httpProtocol);
+      case ("RAMP_USERS"): setUp(TestPopulation.rampUsers).protocols(httpProtocol)
+              .assertions(
+                      global().responseTime().mean().lt(300),
+                      global().successfulRequests().percent().gt(99.0),
+                      forAll().responseTime().max().lt(800)
+              );
         break;
-      case ("COMPLEX_INJECTION"): setUp(TestPopulation.complexInjection).protocols(httpProtocol);
+      case ("COMPLEX_INJECTION"): setUp(TestPopulation.complexInjection).protocols(httpProtocol)
+              .assertions(
+                      global().responseTime().mean().lt(300),
+                      global().successfulRequests().percent().gt(99.0),
+                      forAll().responseTime().max().lt(800)
+              );
         break;
-      case ("CLOSED_MODEL"): setUp(TestPopulation.closedModel).protocols(httpProtocol);
+      case ("CLOSED_MODEL"): setUp(TestPopulation.closedModel).protocols(httpProtocol)
+              .assertions(
+                      global().responseTime().mean().lt(300),
+                      global().successfulRequests().percent().gt(99.0),
+                      forAll().responseTime().max().lt(800)
+              );
         break;
-      default: setUp(TestPopulation.instantUsers).protocols(httpProtocol);
+      default: setUp(TestPopulation.instantUsers).protocols(httpProtocol)
+              .assertions(
+                      global().responseTime().mean().lt(300),
+                      global().successfulRequests().percent().gt(99.0),
+                      forAll().responseTime().max().lt(800)
+              );
     }
   }
 }
